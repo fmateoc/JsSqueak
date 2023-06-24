@@ -1,8 +1,8 @@
-# JsSqueak - a JavaScript implementation of (JavaScript transpiled) Squeak
+# JsSqueak - JavaScript transpiled Squeak
 
 This is a project that brings together several themes that have preoccupied me for a long time.
-I have been thinking about (AOT) compiling Smalltalk for a very long time, as I was both obsessed with performance and a big Smalltalk fan.
-Now, of course, this is not quite it, but I thought I should mention the original spark
+I have been thinking about (AOT) compiling Smalltalk since I was young, as I was both obsessed with performance and a big Smalltalk fan.
+Now, of course, this is not quite it, but I thought the original spark was worth mentioning.
 It is also, of course, inspired by Dan Ingalls' Squeak variations Potato, JSqueak and LivelyKernel, by Vanessa Freudenberg's SqueakJS and by HPI's GraalSqueak/TruffleSqueak.
 More indirectly, I have also been inspired by Alon Zakai's Emscripten.
 Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling Smalltalk to another language was possible. And JavaScript being a dynamic language as well made it allowed me to skip the troublesome type inferencing part of the process.
@@ -27,7 +27,7 @@ There are a few Squeak changesets in the Squeak folder that need to be loaded in
 Note that, although the plugins are also generated (with some overrides), they require more effort and they do not change with the image, so they are very slowly moving targets.
 So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins.
 
-Also note that the generated images will also include the beginnings of some tooling: 
-a. although the filesystem is mainly part of the browser storage, I have also implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
-b. there is also a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
-c. There is also JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything
+Also note that the generated images will include some extra, JavaScript-specific tooling: 
+1. although the filesystem is mainly part of the browser storage, I have also implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
+2. there is also a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
+3. There is also JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything
