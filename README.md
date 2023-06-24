@@ -17,7 +17,7 @@ There are a few Squeak changesets in the Squeak folder that need to be loaded in
 3. from Squeak/common load the JSGeneration changeset. This one hits an out of range error at compile time for one test method, just let it proceed
 4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: 'PathToJsSqueakFolder\' for: imageName"
    This will generate the translated classes and code in a 'JavaScript\generated\' imageName-specific folder within your JsSqueak folder
-5. still in a workspace, evaluate "JavaScriptTranspiler newInstance exportStateTo: 'PathToJsSqueakFolder\' for: imageName"
+5. still in a workspace, evaluate "JavaScriptTranspiler instance exportStateTo: 'PathToJsSqueakFolder\' for: imageName"
    This will generate a few files with the image state in the same imageName-specific folder
 6. immediately minimize the image to avoid generating any objects while the image state is exported. To know when it is done, for now you can check the folder for when the file serialized_Smalltalk_globals.js stops growing
 7. to start the image in the browser, I use a Webstorm IDE run configuration. Configure your favorite Chrome (I am using Chrome Beta to have a separate install), point it to something like https://localhost:63342/JavaScript/index.html#imageName
