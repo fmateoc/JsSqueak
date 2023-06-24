@@ -1,3 +1,7 @@
 
-.idea/
-generated
+JavaScript/.idea/
+JavaScript/generated
+JavaScript/package-cache
+backup
+test-results
+VMMaker
