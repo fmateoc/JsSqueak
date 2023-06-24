@@ -32,4 +32,4 @@ Also note that the generated images will include some extra, JavaScript-specific
 2. there is also a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
 3. There is also JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
 
-For questions or discussions about the project, please use the Squeak-dev list, tagging the subject line with "[JsSqueak]"
+For questions or discussions about the project, please use the Squeak-dev mailing list, tagging the subject line with [JsSqueak]
