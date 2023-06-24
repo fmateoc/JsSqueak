@@ -22,5 +22,9 @@ Blocks are mapped to (generator) function expressions in JavaScript
 CompiledMethod instances exist and are generated, their native counterparts (JavaScript (generator) functions) are bidirectionally linked to them
 Weak classes are implemented by wrapping every element in their storage (JavaScript) array into a JavaScript WeakRef
 
-Primitives are written as inlineable JavaScript snippets, and they are inlined at generation time within the methods using them
+Primitives:
+Numbered primitives are mostly written as inlineable JavaScript snippets, and they are inlined at generation time within the methods using them
+The commonly used access numbered primitives (60, 51, 62, (1)73, (1)74, 105, 132, 145, 148) as well as the instantiation primitives (70, 71),
+are not directly inlined, they are invoked as methods instead, as they are specialized based on the class type at generation time.
+Named primitives from the plugins are also invoked as methods of the plugin object
 
