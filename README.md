@@ -32,4 +32,9 @@ Also note that the generated images will include some extra, JavaScript-specific
 2. there is also a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
 3. There is also JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
 
+Finally, a word about debugging: you do not need to run the project with Dev Tools open, which slows things down significantly. 
+If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
+Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
+There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
+
 For questions or discussions about the project, please use the Squeak-dev mailing list, tagging the subject line with [JsSqueak]
