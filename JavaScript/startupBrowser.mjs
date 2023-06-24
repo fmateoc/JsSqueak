@@ -33,7 +33,7 @@ console.log("Loading generated classes (all the code, plus minimal reflection da
 await import(`./generated/${imageName}/bootstrap.js`);
 await import(`./generated/${imageName}/classes.mjs`);
 await import(`./generated/${imageName}/mapped_types.mjs`);
-await import(`./generated/${imageName}/plugins.mjs`);
+await import(`./plugins.mjs`);
 console.log("Elapsed " + -(start - (start = Date.now())) + "ms\n")
 
 console.log("Loading more glue code");

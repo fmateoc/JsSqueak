@@ -1,0 +1,26 @@
+Whereas SqueakJS or TruffleSqueak are implementations of the Squeak VM, running Squeak bytecodes, JsSqueak is source-only - it first compiles all the Squeak code to JavaScript, it exports the image state as one big JavaScript storeString, and then loads them, and runs both a minimal VM (mostly the process scheduler) and the JavaScript-translated Squeak methods as one combined JavaScript application. The compiled JavaScript application can be run, like SqueakJS-run images, either in a browser or in Node.js
+Still, it is close enough to SqueakJS that I was able to borrow the approach and initial code for generating plugins (of course, it had to be heavily modified since there is no interpreter proxy/stack machine, but it gave me a head start).
+Getting rid of the interpreter proxy was also possible thanks to more aggressive inlining and compile-time evaluations.
+I have also borrowed SqueakJS' browser-related functionality (from squeak.js and vm.files.browser.js)
+
+
+Processes/green threads are implemented using generator functions and recursive yield for all invocations, DNU is implemented using proxies and proto manipulation, the Smalltalk parallel class hierarchy is implemented using JavaScript (constructor) functions and the parallel hierarchy of their prototypes, weak classes are implemented using JavaScript WeakRef instances in their slots
+There are no contexts - since we compile Squeak methods to JavaScript functions, the code runs on the native JavaScript call stack, we do not have a mapping between the JavaScript function activations and reified contexts. Nevertheless, it turns out that, by providing specialized implementations for various aspects that are implemented using contexts/stack walking in Squeak, we can actually run almost all Squeak code as-is, e.g:
+- Squeak exception handling is implemented by reifying the handlers chain associated with a process and using JavaScript throw for unwinding. Resumable and restartable exceptions work, as well as block non-local returns, by using handlers chain-aware JavaScript try/catch constructs. Unwind blocks are implemented using JavaScript try/finally
+	Of course, there is no substitute for reading or seeing the code run in the debugger, but there is an attempt to show some of the exception handling details in the docs folder
+- process and semaphore primitives work, processes being paused or preempted via yield.
+- throwing exceptions in a suspended process works
+- the caller lookup tricks used by #translated and #mustBeBoolean are replaced at JavaScript code generation time
+- the debugger and the profilers, which in Squeak are implemented based on reified contexts, are not truly needed, as they are replaced by the JavaScript debugger/profilers - this works pretty well, since the code under debug/profiling is not interpreted bytecodes, but essentially the original Smalltalk source with a different syntax
+
+Mappings:
+Boolean and its subclasses are mapped to JavaScript Boolean
+SmallInteger and Float are mapped to JavaScript Number (SmallInteger only to the range of safe integers). Since integer values (in the safe range) have Smalltalk SmallInteger behavior (1 / 2 returns a fraction, not 0.5), this mapping alone cannot correctly represent 1.0 / 2 returning 0.5, so we added a Float subclass of Number in JavaScript to hold integer values interpreted as floats.
+Large...Integer are mapped to JavaScript BigInt
+Characters are mapped to single-codepoint strings in JavaScript. Because Squeak Character also squeezes the lead bits into the same word, wide characters are kept as instances of the translated SmalltalkGlobals._Character class in JavaScript, which have a value slot
+Blocks are mapped to (generator) function expressions in JavaScript
+CompiledMethod instances exist and are generated, their native counterparts (JavaScript (generator) functions) are bidirectionally linked to them
+Weak classes are implemented by wrapping every element in their storage (JavaScript) array into a JavaScript WeakRef
+
+Primitives are written as inlineable JavaScript snippets, and they are inlined at generation time within the methods using them
+
