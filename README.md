@@ -5,15 +5,15 @@ I have been thinking about (AOT) compiling Smalltalk since I was young, as I was
 Now, of course, this is not quite it, but I thought the original spark was worth mentioning.
 It is also, of course, inspired by Dan Ingalls' Squeak variations Potato, JSqueak and LivelyKernel, by Vanessa Freudenberg's SqueakJS and by HPI's GraalSqueak/TruffleSqueak.
 More indirectly, I have also been inspired by Alon Zakai's Emscripten.
-Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling Smalltalk to another language was possible. And JavaScript being a dynamic language as well made it allowed me to skip the troublesome type inferencing part of the process.
+Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling Smalltalk to another language was possible. And JavaScript being a dynamic language as well made it possible to skip the troublesome type inferencing part of the process.
 
 Please see the docs folder for some implementation notes.
 
 For running JsSqueak, one must first translate their Squeak image into JavaScript.
-The image should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers
+The image should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers.
 There are a few Squeak changesets in the Squeak folder that need to be loaded in the target image:
 1. from Squeak/common load first the Common-pre changeset.
-2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/closures, for fullClosures-based images, load the two changes from Squeak/fullClosures
+2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/closures, for fullClosures-based images, load the two changesets from Squeak/fullClosures
 3. from Squeak/common load the JSGeneration changeset. This one hits an out of range error at compile time for one test method, just let it proceed
 4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: 'PathToJsSqueakFolder\' for: imageName"
    This will generate the translated classes and code in a 'JavaScript\generated\' imageName-specific folder within your JsSqueak folder
