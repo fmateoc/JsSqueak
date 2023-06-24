@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JsSqueak</title>
+    <meta name="viewport" content="minimum-scale=1,maximum-scale=1,width=device-width">
+    <script type="module" src="./squeak.js"></script>
+    <script>
+        window.onhashchange = function() {
+            window.location.reload();
+        }
+        window.onload = function() {
+            // if we have an image or zip in hash then we run Squeak with the options provided in the url
+            if (location.hash) {
+                sqCanvas.style.display = "block";
+                window.imageName = location.hash.slice(1);
+                window.runImage(sqCanvas, {fullscreen: true});
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas id="sqCanvas"></canvas>
+</body>
+</html>
