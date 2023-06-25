@@ -37,6 +37,8 @@ If a halt or breakpoint in Squeak code is hit, an alert will pop up with instruc
 Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
 There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
 
+Also, see testing-notes.txt in the docs folder for some testing suggestions.
+
 And here is a link to a presentation I gave a year ago about the project at the UK Smalltalk users group: https://vimeo.com/663693415
 
 For questions or discussions about the project, please use the Squeak-dev mailing list, tagging the subject line with [JsSqueak]

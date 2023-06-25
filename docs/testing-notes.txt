@@ -1,0 +1,23 @@
+As far as testing is concerned, one of the first aspects that needs to be controlled/tested, especially since it is a bit overlooked in the source (Squeak) environment, is decompiling.
+Decompiling became a little bit more complicated with the introduction of closures, and even more so with the introduction of full block closures/compiledBlock literals.
+As decompiling is progressive/streaming in nature, it can only account for what has already been seen, therefore it may mistakenly sink variables that should be visible for later usage as block variables in ifNotNil: or to:do: blocks
+Initially the decompiler was working around this by scanning the bytecodes, which was a whole method approach.
+A somewhat similar approach can still be undertaken for the initial closures, where scanning code can focus on a specific block region in the bytecodes.
+But with the introduction of full block closure, where the compiled blocks are separate methods/literals, this becomes much harder.
+My solution therefore is different for closures-based images, where a scanning approach is used, than for full block closures, where the whole method check is done as a post-processing step, which reverts invalid transformations (transformations leading to uncompilable decompiled source)
+
+Why is decompilation so important? This is because we do not have file access from the browser, so we do not have access to the sources or changes file.
+The changes file is memory-only and it starts empty, presumably similar to what David Lewis has recently implemented in Squeak, but I did not have a chance yet to look for convergence there.
+We need decompilation to work reliably, even though initially the methods are exported based on their sources in the source image.
+To check that decompilation is reliable, this is checked at code generation time for all the exported methods.
+Additionally, I regularly use the decompiler tests after loding just the common-pre and the decompiler changesets, to make sure that no decompilation errors occur. 
+I have also heavily modified the checks done for the decompiler tests, to make sure that they test the right thing, and that they raise error whenever the decompiling generates uncompilable sources (which the current tests do not verify)
+Now, there are still remaining failures in the decompilation tests, but they are only a few, and they can be checked to make sure they are only caused by small differences between sematically equivalent code.
+
+In addition to the decompiler tests, I have been using/benefiting from the existing Squeak tests for ironing out various bugs, and for anybody intending to do any development work in JsSqueak, I stronlgy recommend this step.
+Just like with the decompiler tests, there are failing tests, but they boil down to either timing out (although I increased the timeouts compared to Squeak itself), or to some flaky tests behavior - they don't trigger when idividually tested -
+or they are the result of embedded low-level assumptions (like SmallInteger>>maxVal), or to the usage of contexts/stack walking
+
+To help testing, while not wasting time with these known issues, I have created exclusion files, one for 4.5 images, one for 6.0 images. They also exclude some of the very long test (including the decompiler ones).
+They can be found in the testing folder.
+If you place them in the generated/imageName folder and rename them as testExclusions.js, they will be read and deselect on load (of the test runner) the tests we wish to avoid, so that we can concentrate on the ones we wish to always check

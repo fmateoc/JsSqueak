@@ -1,0 +1,22 @@
+SmalltalkGlobals.TestExclusions = `
+AllocationTest
+ArbitraryObjectSocketTestCase
+BitmapStreamTests
+BlockClosureTest
+BlockContextTest
+SocketStreamTest
+ClosureCompilerTest
+MethodHighlightingTests
+ContextCompilationTest
+DebuggerUnwindBug
+FlapTabTests
+ImageSegmentTest
+JPEGReadWriter2Test
+CompiledMethodComparisonTest
+DecompilerTests
+MethodContextTest
+SocketTest
+StringSocketTestCase
+TestIndenting
+Win32VMTest
+`
