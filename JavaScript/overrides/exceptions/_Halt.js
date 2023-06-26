@@ -34,6 +34,7 @@ Object.override(SmalltalkGlobals._Halt.prototype, {
                 yield "DEBUGGER";
                 debugger; //there should be a debugger statement in the halt methods in Object as well, right after the signal call (you can check in the debugger stack if that is the case),
                         // so you can hit run in the debugger to skip stepping until after the exception resumes, where step will return to the method raising the halt
+                return nil;
             } else {
                 yield* (yield* SmalltalkGlobals._Project._current())._spawnNewProcessIfThisIsUI_(SmalltalkVM.activeProcess);
                 console.log("abandoning active process");

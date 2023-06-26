@@ -24,6 +24,7 @@ Object.override(SmalltalkGlobals._Debugger.constructor.prototype, {
         if (GlobalActivationCounter-- < 0) yield* CheckInterruptsOrException("Debugger class>>openContext:label:contents:, checking interrupts:", false, false);
 
         yield* SmalltalkVM.smalltalkDebug();
+        return nil;
     },
 
     _openInterrupt_onProcess_: function *_openInterrupt_onProcess_(_aString, _interruptedProcess) {
@@ -36,6 +37,7 @@ Object.override(SmalltalkGlobals._Debugger.constructor.prototype, {
             _interruptedProcess.exception = "DEBUGGER";
             GlobalActivationCounter = 0;
         }
+        return nil;
     },
 
     _openOn_context_label_contents_fullView_: function *_openOn_context_label_contents_fullView_(_process, _context, _title, _contentsStringOrNil, _bool) {
@@ -50,6 +52,7 @@ Object.override(SmalltalkGlobals._Debugger.constructor.prototype, {
             _process.exception = "DEBUGGER";
             GlobalActivationCounter = 0;
         }
+        return nil;
     },
 })
 

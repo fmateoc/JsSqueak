@@ -28,6 +28,7 @@ Object.override(SmalltalkGlobals._StandardToolSet.constructor.prototype, {
         console.log(_code.valueOf());
 
         yield* SmalltalkVM.smalltalkDebug();
+        return nil;
     },
 
 })
