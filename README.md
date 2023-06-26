@@ -25,7 +25,9 @@ There are a few Squeak changesets in the Squeak folder that need to be loaded in
 	 
 	 
 Note that, although the plugins are also generated (with some overrides), they require more effort and they do not change with the image, so they are very slowly moving targets.
-So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins.
+So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins. 
+Well, to be honest, I also have not regenerated them for quite a while now, and a few things have clarified in my mind since then, e.g. there is/should be no 32-bit vs 64-bit distinction.
+I intend to clean up of the plugin-generating code, and then I will publish the VMMaker changeset as well, together with plugin generating instructions, but if anybody is impatient, let me know and I can share what I have as-is.
 
 Also note that the generated images will include some extra, JavaScript-specific tooling: 
 1. although the filesystem is mainly part of the browser storage, I have also implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
