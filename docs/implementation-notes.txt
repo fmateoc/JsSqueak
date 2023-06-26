@@ -1,16 +1,31 @@
-Whereas SqueakJS or TruffleSqueak are implementations of the Squeak VM, running Squeak bytecodes, JsSqueak is source-only - it first compiles all the Squeak code to JavaScript, it exports the image state as one big JavaScript storeString, and then loads them, and runs both a minimal VM (mostly the process scheduler) and the JavaScript-translated Squeak methods as one combined JavaScript application. The compiled JavaScript application can be run, like SqueakJS-run images, either in a browser or in Node.js
+Whereas SqueakJS or TruffleSqueak are implementations of the Squeak VM, running Squeak bytecodes, JsSqueak is source-only - it first compiles all the Squeak code to JavaScript, it exports the image state as one big JavaScript storeString, and then loads them, and runs both a minimal VM (mostly the process scheduler) and the JavaScript-translated Squeak methods as one combined JavaScript application. The compiled JavaScript application can be run, like SqueakJS-run images, either in a browser or in Node.js
 Still, it is close enough to SqueakJS that I was able to borrow the approach and initial code for generating plugins (of course, it had to be heavily modified since there is no interpreter proxy/stack machine, but it gave me a head start).
 Getting rid of the interpreter proxy was also possible thanks to more aggressive inlining and compile-time evaluations.
 I have also borrowed SqueakJS' browser-related functionality (from squeak.js and vm.files.browser.js)
 
 
-Processes/green threads are implemented using generator functions and recursive yield for all invocations, DNU is implemented using proxies and proto manipulation, the Smalltalk parallel class hierarchy is implemented using JavaScript (constructor) functions and the parallel hierarchy of their prototypes, weak classes are implemented using JavaScript WeakRef instances in their slots
+Processes/green threads are implemented using generator functions and iterative yield* for all invocations, thus using the generators' stacks as the processes'
+stacks. All the
+methods are defined as generator functions, and they are all (other than #class and #==) invoked via
+yield*. The scheduler is a loop that just
+invokes the current processes' block (which is also a generator function)
+next() function, and the process/semaphore primitives use real
+(non-iterating) yield to pass the baton back to the scheduler loop and on
+to the next process.
+
+DNU is implemented using proxies and proto manipulation, the Smalltalk parallel class hierarchy is implemented using JavaScript (constructor) functions and the parallel hierarchy of their prototypes, weak classes are implemented using JavaScript WeakRef instances in their slots.
+
 There are no contexts - since we compile Squeak methods to JavaScript functions, the code runs on the native JavaScript call stack, we do not have a mapping between the JavaScript function activations and reified contexts. Nevertheless, it turns out that, by providing specialized implementations for various aspects that are implemented using contexts/stack walking in Squeak, we can actually run almost all Squeak code as-is, e.g:
-- Squeak exception handling is implemented by reifying the handlers chain associated with a process and using JavaScript throw for unwinding. Resumable and restartable exceptions work, as well as block non-local returns, by using handlers chain-aware JavaScript try/catch constructs. Unwind blocks are implemented using JavaScript try/finally
-	Of course, there is no substitute for reading or seeing the code run in the debugger, but there is an attempt to show some of the exception handling details in the docs folder
-- process and semaphore primitives work, processes being paused or preempted via yield.
-- throwing exceptions in a suspended process works
-- the caller lookup tricks used by #translated and #mustBeBoolean are replaced at JavaScript code generation time
+- Squeak exception handling is implemented by reifying (just) the handlers (instead of
+all the contexts chain) associated with a process, and using JavaScript throw for unwinding. Resumable and restartable exceptions work, as well as block non-local returns, by using JavaScript try/catch constructs combined with handlers manipulation. 
+	Of course, there is no substitute for reading or seeing the code run in the debugger, but there is an attempt to highlight some of the exception handling details in the docs folder. As a summary:
+	- primitive 199 is not just a marker, but an installer for new handlers, a loop (for retries) and a try/catch to handle local exit from the handler block.
+	- Smalltalk-level signal is not a JavaScript throw, it is a loop within the handlers, plus a try/catch to handle resume (resuming is a JavaScript throw)
+	- #ensure: and #ifCurtailed: receivers and arguments are not closures in JavaScript, they are treated as optimized blocks during translation, which also makes sure that the expressions end up as statements, then translated to try/finally for #ensure: or try/catch for #ifCurtailed:
+	- non-local return is using a top-level try/catch in the methods needing it, where the catch identity matches the NonLocalReturn exception instantiated for the method (and thrown from the closure) to perform a normal method return or rethrow.
+	At generation time the transpiler also optimizes away some of the non-local returns for well known patterns like at:..ifAbsent:[^...] or detect:..ifNone:[^...]
+	- throwing exceptions in a suspended process works by attaching the exception to the suspended process. All the process yielding operations have a check for when control gets back to see if an exception has been attached. This is slightly different from Smalltalk, and although JavaScript has the capability of throwing an exception inside a paused generator, we would then lose control over exception handling/unwind operations/faithful active process
+- the caller lookup tricks used by #translated, #deprecated and #mustBeBoolean are replaced at JavaScript code generation time
 - the debugger and the profilers, which in Squeak are implemented based on reified contexts, are not truly needed, as they are replaced by the JavaScript debugger/profilers - this works pretty well, since the code under debug/profiling is not interpreted bytecodes, but essentially the original Smalltalk source with a different syntax
 
 Mappings:
@@ -21,6 +36,8 @@ Characters are mapped to single-codepoint strings in JavaScript. Because
 Blocks are mapped to (generator) function expressions in JavaScript
 CompiledMethod instances exist and are generated, their native counterparts (JavaScript (generator) functions) are bidirectionally linked to them
 Weak classes are implemented by wrapping every element in their storage (JavaScript) array into a JavaScript WeakRef
+
+As the JavaScript wrapper types (Boolean, Number, BigInt, Function and String) cannot sit in within our types hierarchy, the methods (both local and inherited) from the mapped source types are copied to the wrapper types' prototypes. These prototypes are also made to inherit the same DNU proxy as all the translated hierarchy roots
 
 Primitives:
 Numbered primitives are mostly written as inlineable JavaScript snippets, and they are inlined at generation time within the methods using them
