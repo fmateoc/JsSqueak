@@ -11,10 +11,8 @@
 					if (e === h.exitId)
 						return e.payload;
 					if (e !== h.retryId) {
-						if (e instanceof Error) {
-							console.log(e.stack);
+						if (!e.isNonLocalReturn && e !== "TERMINATE")
 							yield* SmalltalkVM.debug();
-						}
 						throw e;
 					}
 					block = e.payload || this;

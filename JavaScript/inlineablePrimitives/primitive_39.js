@@ -2,7 +2,7 @@
     if(arg1Val === 1 || arg1Val === 2) {
         if (typeof this === "number" || this instanceof Number) {
             //Floats are immediates in JavaScript, therefore not modifiable
-            yield* SmalltalkVM.debug();
+            PrimitiveFailed.signal(1);  //anything but nil will do as an error code
         } else if (this.words === undefined)
             yield* SmalltalkVM.debug();
         else {

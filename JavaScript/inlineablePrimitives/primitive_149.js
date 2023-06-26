@@ -29,6 +29,6 @@ if (Number.isSafeInteger(attr)) {
 		if (typeof value === "string") return SmalltalkGlobals._ByteString.from(value);
 		if (value._class().name === "Uint8Array") return SmalltalkGlobals._ByteString.from(String.fromCharCode(...value));
 		if (value._class().name === "Array") return SmalltalkGlobals._Array.from(value);
-		throw Error("cannot make smalltalk object");
+		yield* SmalltalkVM.debug();
 	}
 }
