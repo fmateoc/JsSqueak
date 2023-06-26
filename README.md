@@ -31,9 +31,12 @@ Well, to be honest, I also have not regenerated them for quite a while now, and 
 I intend to clean up the plugin-generating code, and then I will publish the VMMaker changeset as well, together with plugin generating instructions, but if anybody is impatient, let me know and I can share what I have as-is.
 
 Also note that the generated images will include some extra, JavaScript-specific tooling: 
-1. although the filesystem is mainly part of the browser storage, I have also implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
-2. there is also a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
-3. There is also JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
+1. although the filesystem is mainly part of the browser storage, I have implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
+2. there is a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
+3. There is JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
+4. There is a new option for viewing the code pane, "JavaScript". This works in the Squeak image itself as well (after loading the changesets), showing the transalted JavaScript sources.
+5. There is a handy shortcut for debugging the translation process for a specific method, using the binary selector #>>| , the expression "SomeClass >>| #someSelector" returns the translated source for the compiled method "SomeClass >> #someSelector"
+6. There is a way of embedding/interacting with JavaScript code, as a specially formatted comment, like "<JS>...your JavaScript code here...</JS>" within the Squeak source code
 
 Finally, a word about debugging: you do not need to run the project with Dev Tools open, which slows things down significantly. 
 If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
