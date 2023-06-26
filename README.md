@@ -36,7 +36,7 @@ Also note that the generated images will include some extra, JavaScript-specific
 3. There is JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
 4. There is a new option for viewing the code pane, "JavaScript". This works in the Squeak image itself as well (after loading the changesets), showing the transalted JavaScript sources.
 5. There is a handy shortcut for debugging the translation process for a specific method, using the binary selector #>>| , the expression "SomeClass >>| #someSelector" returns the translated source for the compiled method "SomeClass >> #someSelector"
-6. There is a way of embedding/interacting with JavaScript code, as a specially formatted comment, like "<JS>...your JavaScript code here...</JS>" within the Squeak source code
+6. There is a way of embedding/interacting with JavaScript code, as a specially formatted comment, see e.g. the method Browser>>annotation
 
 Finally, a word about debugging: you do not need to run the project with Dev Tools open, which slows things down significantly. 
 If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
