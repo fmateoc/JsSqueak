@@ -5,7 +5,7 @@
 			SmalltalkVM.specialObjectsArray[29] = arg1Val;
 			SmalltalkVM.previousTick = Date.now();
 			SmalltalkVM.nextWakeupTick = arg2Val + SmalltalkVM.MillisecondClockValueOffset;
-			console.log("Setting timing semaphore's nextWakeupTick " + (SmalltalkVM.nextWakeupTick - SmalltalkVM.previousTick) + "ms from now, in primitive 136");
+//			console.log("Setting timing semaphore's nextWakeupTick " + (SmalltalkVM.nextWakeupTick - SmalltalkVM.previousTick) + "ms from now, in primitive 136");
 		} else {
 			SmalltalkVM.specialObjectsArray[29] = nil;
 			SmalltalkVM.nextWakeupTick = 0;

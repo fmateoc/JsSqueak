@@ -50,7 +50,7 @@
 					processListPointers[1].pointers[0] = first;
 				processListPointers[1] = first;
 				first.pointers[3] = processList;
-				console.log("primitive 85 semaphore signal, signalled process had lower priority than the active one, moved to quiescent list - " + semaphoreId);
+//				console.log("primitive 85 semaphore signal, signalled process had lower priority than the active one, moved to quiescent list - " + semaphoreId);
 			}
 		}
 		return this;

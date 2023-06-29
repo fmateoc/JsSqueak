@@ -40,7 +40,7 @@
 					processListPointers[1].pointers[0] = first;
 				processListPointers[1] = first;
 				first.pointers[3] = processList;
-				console.log("primitive 185 mutex exit critical section, suspended process had lower priority than the active one, moved to quiescent list");
+//				console.log("primitive 185 mutex exit critical section, suspended process had lower priority than the active one, moved to quiescent list");
 			}
 		}
 		return this;

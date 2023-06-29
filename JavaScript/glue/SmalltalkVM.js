@@ -213,9 +213,9 @@ globalThis.GlobalCheckForInterrupts = (function* checkForInterrupts() {
             smalltalkVM.nextWakeupTick = 0; // reset timer interrupt
             const sema = specials[29];
             if (sema !== nil) {
-                if (typeof fromNext === 'string')
-                    console.log(fromNext);
-                console.log("Signalling timing semaphore after " + (now - smalltalkVM.previousTick) + "ms (vs " + (scheduled - smalltalkVM.previousTick) + "ms scheduled)");
+//                if (typeof fromNext === 'string')
+//                    console.log(fromNext);
+//                console.log("Signalling timing semaphore after " + (now - smalltalkVM.previousTick) + "ms (vs " + (scheduled - smalltalkVM.previousTick) + "ms scheduled)");
                 smalltalkVM.previousTick = now;   //see primitive_136 as well
                 fromNext = yield* sema._signal();
             } else {
@@ -244,8 +244,8 @@ globalThis.GlobalCheckForInterrupts = (function* checkForInterrupts() {
                 const sema = externalSemaphores[index - 1];
                 if (sema !== nil) {
                     if (typeof fromNext === 'string')
-                        console.log(fromNext);
-                    console.log("signalling " + (sema.name.startsWith("no-name ") ? "external semaphore at index " + index : sema.name));
+//                        console.log(fromNext);
+//                    console.log("signalling " + (sema.name.startsWith("no-name ") ? "external semaphore at index " + index : sema.name));
                     fromNext = yield* sema._signal();
                 } else {
                     debugger;
@@ -263,9 +263,9 @@ console.log("setting up the scheduler loop");
 let qualifier = "entering new";
 setTimeout(function run () {
     const current = SmalltalkVM.activeProcess;
-    console.log(qualifier + " active process with priority " + SmalltalkVM.activePriority /*+ " at " + performance.now()*/);
+//    console.log(qualifier + " active process with priority " + SmalltalkVM.activePriority /*+ " at " + performance.now()*/);
     const yielded = current.generator.next().value;
-    console.log(yielded/* + " at " + performance.now()*/);
+//    console.log(yielded/* + " at " + performance.now()*/);
     let nextTimeout = 0;
     if (typeof yielded === "string" && yielded.startsWith("relinquishing Processor for ")) {
         nextTimeout = Number(yielded.slice(28));
@@ -318,11 +318,13 @@ delayClassPool._at_put_(SmalltalkGlobals._ByteSymbol.from("SuspendedDelays"), ne
 delayClassPool._at_put_(SmalltalkGlobals._ByteSymbol.from("ScheduledDelay"), nil).next();
 delayClassPool._at_put_(SmalltalkGlobals._ByteSymbol.from("FinishedDelay"), nil).next();
 delayClassPool._at_put_(SmalltalkGlobals._ByteSymbol.from("ActiveDelay"), nil).next();
+const timingSemaphore = SmalltalkGlobals._Semaphore._new().next().value;
+timingSemaphore.name = 'TimingSemaphore';
+timingSemaphore.stack = '';
+delayClassPool._at_put_(SmalltalkGlobals._ByteSymbol.from("TimingSemaphore"), timingSemaphore).next();
 SmalltalkGlobals._Delay._initialize().next();
 delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("AccessProtect")).next().value.name = '_Delay.AccessProtect';
 delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("AccessProtect")).next().value.stack = '';
-delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("TimingSemaphore")).next().value.name = 'TimingSemaphore';
-delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("TimingSemaphore")).next().value.stack = '';
 delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("TimerEventLoop")).next().value.name = 'TimerEventLoop';
 delayClassPool._at_(SmalltalkGlobals._ByteSymbol.from("TimerEventLoop")).next().value.stack = '';
 

@@ -6,7 +6,7 @@ if(typeof arg1Val === 'object' && Number.isSafeInteger(arg2Val)) {
         SmalltalkVM.previousTick = Date.now();
         const msTime = Math.floor(arg2Val / 1000);
         SmalltalkVM.nextWakeupTick = msTime + SmalltalkVM.EpochUTC;
-        console.log("Setting timing semaphore's nextWakeupTick " + (SmalltalkVM.nextWakeupTick - SmalltalkVM.previousTick) + "ms from now, in primitive 242");
+//        console.log("Setting timing semaphore's nextWakeupTick " + (SmalltalkVM.nextWakeupTick - SmalltalkVM.previousTick) + "ms from now, in primitive 242");
     } else {
         SmalltalkVM.specialObjectsArray[29] = nil;
         SmalltalkVM.nextWakeupTick = 0;
