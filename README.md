@@ -25,9 +25,9 @@ There are a few Squeak changesets in the Squeak folder that need to be loaded in
    and use the flags --js-flags="--expose-gc --stack-size 8000 --ignore-certificate-errors"
 	 
 	 
-Note that, although the plugins are also generated (with some overrides), they require more effort and they do not change with the image, so they are very slowly moving targets.
+Note that, although the VM plugins are also generated (with some overrides), they require more effort and they do not change with the image, so they are very slowly moving targets.
 So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins. 
-Well, to be honest, I also have not regenerated them for quite a while now, and a few things have clarified in my mind since then, e.g. there is/should be no 32-bit vs 64-bit distinction.
+To be honest, I also have not regenerated them for quite a while now, and a few things have clarified in my mind since then, e.g. there is/should be no 32-bit vs 64-bit distinction.
 I intend to clean up the plugin-generating code, and then I will publish the VMMaker changeset as well, together with plugin generating instructions, but if anybody is impatient, let me know and I can share what I have as-is.
 
 Also note that the generated images will include some extra, JavaScript-specific tooling: 
@@ -42,6 +42,8 @@ Finally, a word about debugging: you do not need to run the project with Dev Too
 If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
 Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
 There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
+Speaking of debugging, a pleasant surprise (not totally unexpected, but more rewarding that I had anticipated) was the removal of the barrier between the VM and the image that happens after translation. It truly is a pleasure to be able to just enter the primitives' (formerly VM) code naturally from the "Smalltalk" or "image" side, with just a debugger step into. This makes it, of course, much easier to develop/debug the primitives' code, or even the VM's process scheduler code, and allows for a more holistic view of your program. 
+This should compensation somewhat for the suffering inflicted by the JavaScript syntax replacing the Smalltalk one.
 
 Also, see testing-notes.txt in the docs folder for some testing suggestions.
 
