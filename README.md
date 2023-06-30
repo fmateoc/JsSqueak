@@ -43,7 +43,7 @@ If a halt or breakpoint in Squeak code is hit, an alert will pop up with instruc
 Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
 There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
 Speaking of debugging, a pleasant surprise (not totally unexpected, but more rewarding that I had anticipated) was the removal of the barrier between the VM and the image that happens after translation. It truly is a pleasure to be able to just enter the primitives' (formerly VM) code naturally from the "Smalltalk" or "image" side, with just a debugger step into. This makes it, of course, much easier to develop/debug the primitives' code, or even the VM's process scheduler code, and allows for a more holistic view of your program. 
-This should compensation somewhat for the suffering inflicted by the JavaScript syntax replacing the Smalltalk one.
+This should compensate somewhat for the suffering inflicted by the JavaScript syntax replacing the Smalltalk one ;).
 
 Also, see testing-notes.txt in the docs folder for some testing suggestions.
 
