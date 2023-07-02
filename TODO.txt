@@ -1,14 +1,14 @@
 First, some micro-goals:
 1. DecompilerTests has some extra errors and failures compared to the source image in Squeak, pointing to some decompiler or code generation bugs
 2. Especially for primitives, but presumably applicable to specialized iteration methods as well, we can do a micro-optimization - replacing the 0-based index adaption (subtracting one from the index) within loop bodies with a change in initial conditions
-3. Replace indirect calls for specialized numbered primitives with inlingin the specialized calls directly within their methods
+3. Replace indirect calls for specialized numbered primitives with inlining the specialized calls directly within their methods
 
 Second, some plugin code generation changes:
 1. do more aggressive inlining, hopefully to the extent that only the exported primitive entry points in the plugins remain, allowing us to replace exception-based return (PrimitiveReturn or PrimitiveFailure signalling) with normal method returns
 2a. if/after 1. is achieved, or at least for the situations where 1. is achieved, replace the plugin invocation with primitive inlining, like we do with numbered primitives
 2b. if/after 1. is achieved, generate wasm for the plugin primitives instead of JavaScript (perhaps for the remaining cases where we can not inline the primitive bodies within their methods)
 
-Third (but it could also come before plugin code generation changes), some higher-level mappings for basic functionality:
+Third (but it could also come before plugin code generation changes), some higher-level mappings for basic/commoditized functionality:
 1. Map Squeak's IdentityDictionary to JavaScript's Map and Squeak's IdentitySet to JavaScript's Set
 2. Map Squeak's TextConverter to JavaScript's TextEncoder and TextDecoder
 3. Map Squeak's RxMatcher to JavaScript's RegExp
