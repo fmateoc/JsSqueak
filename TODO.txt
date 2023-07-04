@@ -1,7 +1,6 @@
 First, some micro-goals:
-1. DecompilerTests has some extra errors and failures compared to the source image in Squeak, pointing to some decompiler or code generation bugs
-2. Especially for primitives, but presumably applicable to specialized iteration methods as well, we can do a micro-optimization - replacing the 0-based index adaption (subtracting one from the index) within loop bodies with a change in initial conditions
-3. Replace indirect calls for specialized numbered primitives with inlining the specialized calls directly within their methods
+1. Especially for primitives, but presumably applicable to specialized iteration methods as well, we can do a micro-optimization - replacing the 0-based index adaption (subtracting one from the index) within loop bodies with a change in initial conditions
+2. Replace indirect calls for specialized numbered primitives with inlining the specialized calls directly within their methods
 
 Second, some plugin code generation changes:
 1. do more aggressive inlining, hopefully to the extent that only the exported primitive entry points in the plugins remain, allowing us to replace exception-based return (PrimitiveReturn or PrimitiveFailure signalling) with normal method returns
