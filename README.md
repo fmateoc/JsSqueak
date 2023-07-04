@@ -7,11 +7,11 @@ It is also, of course, inspired by Dan Ingalls' Squeak variations Potato,�
 More indirectly, I have also been inspired by Alon Zakai's Emscripten.
 Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling Smalltalk to another language was possible. And JavaScript being a dynamic language as well made it possible to skip the troublesome type inferencing part of the process.
 
-Please see the docs folder for some implementation notes. Speaking of implementation, I should mention Peter Deutsch' observation: “ implementing a language like Smalltalk efficiently requires the
+Please see the docs folder for some implementation notes. Speaking of implementation, I should mention here Peter Deutsch' observation: “ implementing a language like Smalltalk efficiently requires the
 implementor to cheat... but that’s okay as long as you don’t get caught”. So, where am I cheating? There are no reified contexts in the implementation, but I would argue that reified contexts are not essential to the meaning of Smalltalk in general, or Squeak in particular.
 One other small difference that I contend is still within Smalltalk semantics is having immediates for LargeInteger (they are mapped to BigInt).
 Other than the above, the one problematic area is the lack of control over the garbage collector (we rely on the native JavaScript one), and, related to that, a forwardBecome: native operation in JavaScript. Given that the semantics of forwardBecome: are linked to object pointers, over which we do not have control, the implementation is only an approximation. It works well enough that the image and most tests (other than the ones forward becoming locals) is behaving similarly.
-For two-way become, it is conceptually easier, as, instead of swapping the pointers, we are swapping the contents of the obejcts, but this is not externally observable.
+For two-way become, it is conceptually easier, as, instead of swapping the pointers to the objects, we are swapping the contents of the objects, but this is not an externally observable operation.
 
 For running JsSqueak, one must first translate their Squeak image into JavaScript.
 Image versions between 4.5 and 6.0 should work - I have tested with 4.5, 5.3 and 6.0.
