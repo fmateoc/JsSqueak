@@ -17,7 +17,7 @@
  * along with JsSqueak.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Error.stackTraceLimit = 100;
+Error.stackTraceLimit = 50;
 
 const smalltalkVM = Object.create(null);
 

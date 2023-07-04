@@ -317,5 +317,9 @@ Array.Empty = Object.freeze([]);
 Uint8Array.Empty = Object.freeze(new Uint8Array());
 Uint16Array.Empty = Object.freeze((new Uint16Array()));
 Uint32Array.Empty = Object.freeze((new Uint32Array()));
+Int16Array.Empty = Object.freeze((new Int16Array()));
+Int32Array.Empty = Object.freeze((new Int32Array()));
 BigUint64Array.Empty = Object.freeze((new BigUint64Array()));
+Float64Array.Empty = Object.freeze((new Float64Array()));
+Float32Array.Empty = Object.freeze((new Float32Array()));
 

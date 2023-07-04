@@ -43,6 +43,7 @@ const functionOnlyHandler = new Proxy(Function.prototype, {
         debugger;
         throw new TypeError("Cannot read property '" + prop + "' of undefined");
     }, set(target, prop, value, receiver) {
+        debugger;
         throw new TypeError("Cannot set property '" + prop + "' of undefined");
     }});
 Object.setPrototypeOf(DNU, functionOnlyHandler);
@@ -59,6 +60,7 @@ const dnuHandler = {
             if ('_cannotInterpret_' in objectReceiver) {
                 return CI.bind(objectReceiver, prop);
             }
+            debugger;
             throw new Error("Neither a #doesNotUnderstand: nor a #cannotInterpret: implementation has been found in the hierarchy of " + objectReceiver.constructor.name + " while looking for nonexistent method " + prop);
         } else {
 //            missed.set(prop, (missed.get(prop) || 0) + 1);
@@ -86,16 +88,29 @@ dnuProxy[Symbol.search] = undefined;
 dnuProxy[Symbol.split] = undefined;
 dnuProxy[Symbol.toPrimitive] = undefined;
 dnuProxy[Symbol.toStringTag] = undefined;
+dnuProxy[Symbol.iterator] = undefined;
+dnuProxy[Symbol.asyncIterator] = undefined;
+dnuProxy[Symbol.hasInstance] = undefined;
+dnuProxy[Symbol.species] = undefined;
+dnuProxy[Symbol.isConcatSpreadable] = undefined;
+dnuProxy.splice = undefined;
 //and this is to avoid triggering the proxy handler when we check for storage (not everyone will have these defined, but when we check whether or not they are defined, it should not hit the proxy)
 dnuProxy.longs = undefined;
 dnuProxy.words = undefined;
 dnuProxy.shorts = undefined;
 dnuProxy.bytes = undefined;
+dnuProxy.int16Array = undefined;
+dnuProxy.int32Array = undefined;
+dnuProxy.float64Array = undefined;
+dnuProxy.uint32Array = undefined;
 dnuProxy.pointers = undefined;
+dnuProxy.storageType = undefined;
 dnuProxy.string = undefined;
 dnuProxy.literals = undefined;
 dnuProxy.hash = undefined;
 dnuProxy.pinned = undefined;
+dnuProxy.isPrimitiveFailed = undefined;
+dnuProxy.isNonLocalReturn = undefined;
 
 dnuProxy.primitive_60_impl = function primitive_60_impl() {return [false]}
 dnuProxy.primitive_61_impl = function primitive_61_impl() {return [false]}
