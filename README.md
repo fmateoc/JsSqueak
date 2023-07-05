@@ -14,7 +14,7 @@ Other than the above, the one problematic area is the lack of control over the g
 For two-way become, it is conceptually easier, as, instead of swapping the pointers to the objects, we are swapping the contents of the objects, but this is not an externally observable operation.
 
 For running JsSqueak, one must first translate their Squeak image into JavaScript.
-Image versions between 4.5 and 6.0 should work - I have tested with 4.5, 5.3 and 6.0.
+Image versions between 4.5 and 6.0, or trunk (up to, as of this writing, 6.1alpha-22667) should work - I have tested with 4.5, 5.3, 6.0, and partially with trunk.
 The image should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers.
 There are a few Squeak changesets in the Squeak folder that need to be loaded in the target image:
 1. from Squeak/common load first the Common-pre changeset.
