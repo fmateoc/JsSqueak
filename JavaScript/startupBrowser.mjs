@@ -70,8 +70,8 @@ await Promise.all([
     import('./overrides/numbers/BigInt.js'), import('./overrides/Boolean.js'), import('./overrides/numbers/Float.js'), import('./overrides/processes/Function.js'),
     import('./overrides/numbers/Number.js'), import('./overrides/characters/String.js'),
 
-    import('./overrides/plugins/B2DPlugin.js'), import('./overrides/plugins/FilePlugin.js'), import('./overrides/plugins/FloatArrayPlugin.js'), import('./overrides/numbers/LargeIntegers.js'),
-    import('./overrides/plugins/Matrix2x3Plugin.js'), import('./overrides/strings/MiscPrimitivePlugin.js')
+    import('./overrides/plugins/B2DPlugin.js'), import('./overrides/plugins/BitBltPlugin.js'), import('./overrides/plugins/FilePlugin.js'), import('./overrides/plugins/FloatArrayPlugin.js'),
+    import('./overrides/numbers/LargeIntegers.js'), import('./overrides/plugins/Matrix2x3Plugin.js'), import('./overrides/strings/MiscPrimitivePlugin.js')
 ]);
 
 console.log("Loading VM/scheduler");

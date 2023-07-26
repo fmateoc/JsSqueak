@@ -400,59 +400,58 @@ Object.override(Number.prototype, {
 
     *_digitLength() {
             const val = this.valueOf();
-            if (val < 0) {
-                if (val > -4294967296) {
-                    if (val > -65536) {
-                        if (val > -256) {
-                            return 1
-                        } else {
-                            return 2
-                        }
-                    } else {
-                        if (val > -16777216) {
-                            return 3
-                        } else {
-                            return 4
-                        }
-                    }
-                } else {
-                    if (val > -281474976710656) {
-                        if (val > -1099511627776) {
-                            return 5
-                        } else {
-                            return 6
-                        }
-                    } else {
-                        return 7
-                    }
-                }
-            } else {
-                if (val < 4294967296) {
-                    if (val < 65536) {
-                        if (val < 256) {
-                            return 1
-                        } else {
-                            return 2
-                        }
-                    } else {
-                        if (val < 16777216) {
-                            return 3
-                        } else {
-                            return 4
-                        }
-                    }
-                } else {
-                    if (val < 281474976710656) {
-                        if (val < 1099511627776) {
-                            return 5
-                        } else {
-                            return 6
-                        }
-                    } else {
-                        return 7
-                    }
-                }
-            }
+            return val < 0 ?
+                (val > -4294967296 ?
+                    (val > -65536 ?
+                        (val > -256 ?
+                            1
+                        :
+                            2
+                        )
+                    :
+                        (val > -16777216 ?
+                            3
+                        :
+                            4
+                        )
+                    )
+                :
+                    ((val > -281474976710656) ?
+                        ((val > -1099511627776) ?
+                            5
+                        :
+                            6
+                        )
+                    :
+                        7
+                    )
+                )
+            :
+                (val < 4294967296 ?
+                    (val < 65536 ?
+                        (val < 256 ?
+                            1
+                        :
+                            2
+                        )
+                    :
+                        (val < 16777216 ?
+                            3
+                        :
+                            4
+                        )
+                    )
+                :
+                    (val < 281474976710656 ?
+                        (val < 1099511627776 ?
+                            5
+                        :
+                            6
+                        )
+                    :
+                        7
+                    )
+                )
     },
 
     *_gcd_(_anInteger) {

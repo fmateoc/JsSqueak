@@ -18,6 +18,64 @@
  */
 
 Object.override(LargeIntegers, {
+    /*	Answer the number of bytes required to represent the value of a CSmallInteger. */
+
+    cDigitLengthOfCSI(val) {
+        return val < 0 ?
+            (val > -4294967296 ?
+                    (val > -65536 ?
+                            (val > -256 ?
+                                    1
+                                    :
+                                    2
+                            )
+                            :
+                            (val > -16777216 ?
+                                    3
+                                    :
+                                    4
+                            )
+                    )
+                    :
+                    ((val > -281474976710656) ?
+                            ((val > -1099511627776) ?
+                                    5
+                                    :
+                                    6
+                            )
+                            :
+                            7
+                    )
+            )
+            :
+            (val < 4294967296 ?
+                    (val < 65536 ?
+                            (val < 256 ?
+                                    1
+                                    :
+                                    2
+                            )
+                            :
+                            (val < 16777216 ?
+                                    3
+                                    :
+                                    4
+                            )
+                    )
+                    :
+                    (val < 281474976710656 ?
+                            (val < 1099511627776 ?
+                                    5
+                                    :
+                                    6
+                            )
+                            :
+                            7
+                    )
+            )
+    }
+    ,
+
     /*	anOop has to be a SmallInteger! */
 
     createLargeFromSmallInteger(anOop) {
