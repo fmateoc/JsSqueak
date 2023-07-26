@@ -27,11 +27,19 @@ There are a few Squeak changesets in the Squeak folder that need to be loaded in
 6. immediately minimize the image to avoid generating any objects while the image state is exported. To know when it is done, for now you can check the folder for when the file serialized_Smalltalk_globals.js stops growing
 7. to start the image in the browser, I use a Webstorm IDE run configuration. Configure your favorite Chrome (I am using Chrome Beta to have a separate install), point it to something like https://localhost:63342/JavaScript/index.html#imageName
    and use the flags --js-flags="--expose-gc --stack-size 8000 --ignore-certificate-errors"
+
+
+Note that the generated images will include some extra, JavaScript-specific tooling: 
+1. although the filesystem is mainly part of the browser storage, I have implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
+2. there is a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
+3. There is JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
+4. There is a new option for viewing the code pane, "JavaScript". This works in the Squeak image itself as well (after loading the changesets), showing the transalted JavaScript sources.
+5. There is a handy shortcut for debugging the translation process for a specific method, using the binary selector #>>| , the expression "SomeClass >>| #someSelector" returns the translated source for the compiled method "SomeClass >> #someSelector"
+6. There is a way of embedding/interacting with JavaScript code, as a specially formatted comment, see e.g. the method Browser>>annotation
 	 
 	 
-Note that, although the VM plugins are also generated (with some overrides), they require more effort and they do not change with the image, so they are very slowly moving targets.
-So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins. 
-I have now also published the changesets required for building the plugins. Some basic instructions:
+As far as the plugins are concerned, although they are also generated (with some overrides), they require more effort and they do not change with the image - they are very slowly moving targets.
+So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for building the plugins. Some basic instructions:
 1. open a clean 4.5 image (this is what was used for the original VMMakerJS)
 2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the original VMMakerJS
 3. load the changeset Common-pre from Squeak/common
@@ -41,15 +49,7 @@ I have now also published the changesets required for building the plugins. Some
 7. execute "JSCodeGenerator exportAll" (the method is just a convenience/example, and it contains a hardcoded local path, you should change that before running)
 
 
-Also note that the generated images will include some extra, JavaScript-specific tooling: 
-1. although the filesystem is mainly part of the browser storage, I have implemented external fileIn/fileOut for changesets, to compensate for the fact that the image is not saveable itself
-2. there is a JS inspector that allows you to go beyond the image view of the objects and look at the internal (JavaScript) representation. 
-3. There is JavaScript evaluation, but keep in mind that the snippet will be the body of a JavaScript function, therefore, unlike Smalltalk blocks, it requires explicit return keywords in order to return anything.
-4. There is a new option for viewing the code pane, "JavaScript". This works in the Squeak image itself as well (after loading the changesets), showing the transalted JavaScript sources.
-5. There is a handy shortcut for debugging the translation process for a specific method, using the binary selector #>>| , the expression "SomeClass >>| #someSelector" returns the translated source for the compiled method "SomeClass >> #someSelector"
-6. There is a way of embedding/interacting with JavaScript code, as a specially formatted comment, see e.g. the method Browser>>annotation
-
-Finally, a word about debugging: you do not need to run the project with Dev Tools open, which slows things down significantly. 
+Finally, a word about debugging: you do not need to run the JavaScript project with Dev Tools open, which slows things down significantly. 
 If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
 Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
 There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
