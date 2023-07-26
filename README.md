@@ -39,7 +39,7 @@ Note that the generated images will include some extra, JavaScript-specific tool
 	 
 	 
 As far as the plugins are concerned, although they are also generated (with some overrides), they require more effort and they do not change with the image - they are very slowly moving targets.
-So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for building the plugins. Some basic instructions:
+So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for generating them. Some basic instructions:
 1. open a clean 4.5 image (this is what was used for the original VMMakerJS)
 2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the original VMMakerJS
 3. load the changeset Common-pre from Squeak/common
