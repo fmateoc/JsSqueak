@@ -17,9 +17,9 @@ For running JsSqueak, one must first translate their Squeak image into JavaScrip
 Image versions between 4.5 and 6.0, or trunk (up to, as of this writing, 6.1alpha-22667) should work - I have tested with 4.5, 5.3, 6.0, and partially with trunk.
 The image should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers.
 There are a few Squeak changesets in the Squeak folder that need to be loaded in the target image:
-1. from Squeak/common load first the Common-pre changeset.
-2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/closures; for fullClosures-based images, load the two changesets from Squeak/fullClosures
-3. load the JSGeneration changeset from Squeak/common. This one hits an out of range error at compile time for one test method, just let it proceed
+1. from Squeak/image/common load first the Common-pre changeset.
+2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/image/era-specific/closures; for fullClosures-based images, load the two changesets from Squeak/image/era-specific/fullClosures
+3. load the JSGeneration changeset from Squeak/image/common. This one hits an out of range error at compile time for one test method, just let it proceed
 4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: 'PathToJsSqueakFolder\' for: imageName"
    This will generate the translated classes and code in a 'JavaScript\generated\' imageName-specific folder within your JsSqueak folder
 5. still in a workspace, evaluate "JavaScriptTranspiler instance exportStateTo: 'PathToJsSqueakFolder\' for: imageName", then immediately minimize the image to avoid generating any new objects while the image state is being exported.
@@ -41,10 +41,10 @@ As far as the plugins are concerned, although they are also generated (with some
 So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for generating them. Some basic instructions:
 1. open a clean 4.5 image (this is what was used for the original VMMakerJS for SqueakJS) 
 2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the latest VMMakerJS for SqueakJS (VMMakerJS-dtl.18), which I have used as a starting point
-3. load the changeset Common-pre from Squeak/common
+3. load the changeset Common-pre from Squeak/image/common
 4. load the latest version of VMMaker (VMMaker-dtl.439 as of this writing) from the VMMaker repo, to get the latest plugin fixes - proceed through the several syntax errors, they do not affect the plugins that we generate
 5. load the changeset VMMakerJS-fm from Squeak/plugins
-6. load the changeset JSGeneration from Squeak/common
+6. load the changeset JSGeneration from Squeak/image/common
 7. execute "JSCodeGenerator exportAll" - the method is just a convenience/example, it also contains a hardcoded local path that should be changed that before running; while running it, proceed through one Halt
 
 
