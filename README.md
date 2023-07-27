@@ -18,14 +18,13 @@ Image versions between 4.5 and 6.0, or trunk (up to, as of this writing, 6.1alph
 The image should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers.
 There are a few Squeak changesets in the Squeak folder that need to be loaded in the target image:
 1. from Squeak/common load first the Common-pre changeset.
-2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/closures, for fullClosures-based images, load the two changesets from Squeak/fullClosures
-3. from Squeak/common load the JSGeneration changeset. This one hits an out of range error at compile time for one test method, just let it proceed
+2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/closures; for fullClosures-based images, load the two changesets from Squeak/fullClosures
+3. load the JSGeneration changeset from Squeak/common. This one hits an out of range error at compile time for one test method, just let it proceed
 4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: 'PathToJsSqueakFolder\' for: imageName"
    This will generate the translated classes and code in a 'JavaScript\generated\' imageName-specific folder within your JsSqueak folder
-5. still in a workspace, evaluate "JavaScriptTranspiler instance exportStateTo: 'PathToJsSqueakFolder\' for: imageName"
-   This will generate a few files with the image state in the same imageName-specific folder
-6. immediately minimize the image to avoid generating any objects while the image state is exported. To know when it is done, for now you can check the folder for when the file serialized_Smalltalk_globals.js stops growing
-7. to start the image in the browser, I use a Webstorm IDE run configuration. Configure your favorite Chrome (I am using Chrome Beta to have a separate install), point it to something like https://localhost:63342/JavaScript/index.html#imageName
+5. still in a workspace, evaluate "JavaScriptTranspiler instance exportStateTo: 'PathToJsSqueakFolder\' for: imageName", then immediately minimize the image to avoid generating any new objects while the image state is being exported.
+   This will generate a few files with the image state in the same imageName-specific folder. To know when it is done, for now, check the folder until the file serialized_Smalltalk_globals.js stops growing - a clean 4.5 image should result in a 30MB file, a clean 6.0 image should result in a slightly over 100MB file.
+6. to start the image in the browser, I use a Webstorm IDE run configuration. Configure your favorite Chrome (I am using Chrome Beta to have a separate install), point it to something like https://localhost:63342/JavaScript/index.html#imageName
    and use the flags --js-flags="--expose-gc --stack-size 8000 --ignore-certificate-errors"
 
 
@@ -41,7 +40,7 @@ Note that the generated images will include some extra, JavaScript-specific tool
 As far as the plugins are concerned, although they are also generated (with some overrides), they require more effort and they do not change with the image - they are very slowly moving targets.
 So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for generating them. Some basic instructions:
 1. open a clean 4.5 image (this is what was used for the original VMMakerJS for SqueakJS) 
-2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the latest VMMakerJS for SqueakJS (VMMakerJS-dtl.18)
+2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the latest VMMakerJS for SqueakJS (VMMakerJS-dtl.18), which I have used as a starting point
 3. load the changeset Common-pre from Squeak/common
 4. load the latest version of VMMaker (VMMaker-dtl.439 as of this writing) from the VMMaker repo, to get the latest plugin fixes - proceed through the several syntax errors, they do not affect the plugins that we generate
 5. load the changeset VMMakerJS-fm from Squeak/plugins
@@ -50,9 +49,9 @@ So, instead of requiring that all the users build a VMMaker image to generate th
 
 
 Finally, a word about debugging: you do not need to run the JavaScript project with Dev Tools open, which slows things down significantly. 
-If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools.
-Alternatively, you can also chose to just hit OK in the alert, which is the equivalent of Squeak's debugger popup, to continue.
-There are also VM-level asserts that raise a similar alert. These allow you to debug/inspect, determine the cause of the failure, but other than that these are essentially VM crashes, and in general non-recoverable.
+If a halt or breakpoint in Squeak code is hit, an alert will pop up with instructions to open the browser's debugger. You can do your debugging session, after which you can resume and then close the Dev Tools again.
+Alternatively, you can also choose to just hit OK in the alert (which is the equivalent of Squeak's debugger popup), to continue.
+There are also VM-level asserts that raise a similar alert - these allow you to debug/inspect, try to determine the cause of the failure, but other than that these are essentially VM crashes, so in general they are non-recoverable.
 Speaking of debugging, a pleasant surprise (not totally unexpected, but more rewarding that I had anticipated) was the removal of the barrier between the VM and the image that happens after translation. It truly is a pleasure to be able to just enter the primitives' (formerly VM) code naturally from the "Smalltalk" or "image" side, with just a debugger step into. This makes it, of course, much easier to develop/debug the primitives' code, or even the VM's process scheduler code, and allows for a more holistic view of your program. 
 This should compensate somewhat for the suffering inflicted by the JavaScript syntax replacing the Smalltalk one ;).
 
