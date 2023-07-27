@@ -40,13 +40,13 @@ Note that the generated images will include some extra, JavaScript-specific tool
 	 
 As far as the plugins are concerned, although they are also generated (with some overrides), they require more effort and they do not change with the image - they are very slowly moving targets.
 So, instead of requiring that all the users build a VMMaker image to generate the plugins, I have published the already generated plugins, alongside the changesets required for generating them. Some basic instructions:
-1. open a clean 4.5 image (this is what was used for the original VMMakerJS)
-2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the original VMMakerJS
+1. open a clean 4.5 image (this is what was used for the original VMMakerJS for SqueakJS) 
+2. load update-dtl.21 from the VMMaker repo in Monticello - this contains the latest VMMakerJS for SqueakJS (VMMakerJS-dtl.18)
 3. load the changeset Common-pre from Squeak/common
-4. load latest VMMaker (VMMaker-dtl.439) from the VMMaker Monticello repo
+4. load the latest version of VMMaker (VMMaker-dtl.439 as of this writing) from the VMMaker repo, to get the latest plugin fixes - proceed through the several syntax errors, they do not affect the plugins that we generate
 5. load the changeset VMMakerJS-fm from Squeak/plugins
 6. load the changeset JSGeneration from Squeak/common
-7. execute "JSCodeGenerator exportAll" (the method is just a convenience/example, and it contains a hardcoded local path, you should change that before running)
+7. execute "JSCodeGenerator exportAll" - the method is just a convenience/example, it also contains a hardcoded local path that should be changed that before running; while running it, proceed through one Halt
 
 
 Finally, a word about debugging: you do not need to run the JavaScript project with Dev Tools open, which slows things down significantly. 
