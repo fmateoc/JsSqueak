@@ -34,45 +34,36 @@ Object.override(SmalltalkGlobals._Color.prototype, {
         if (GlobalActivationCounter-- < 0) yield* CheckInterruptsOrException("Color>>pixelValueForDepth:, checking interrupts:", false, false);
 
         const rgb = this.pointers[0];
-        const d = _d.valueOf();
-        if (d > 8) {
-            /*most common case*/
-            if (d === 32) {
+        switch (_d.valueOf()) {
+            case 32:
                 /*eight bits per component; top 8 bits set to all ones (opaque alpha)*/
                 /*this subexpression is a SmallInteger in both 32- and 64-bits.*/
                 _val = yield* (yield* (yield* rgb._bitShift_( -6))._bitAnd_( 16711680))._bitOr_( yield* (yield* (yield* rgb._bitShift_( -4))._bitAnd_( 65280))._bitOr_( yield* (yield* rgb._bitShift_( -2))._bitAnd_( 255)));
                 /*16rFF000000 & 16rFF000001 are LargeIntegers in 32-bits, SmallIntegers in 64-bits.*/
                 return _val == 0 ? 0xFF000001 : (yield* _val._add( 4278190080));
-            }
-            if (d === 16) {
+            case 16:
                 /*five bits per component; top bits ignored*/
                 _val = yield* (yield* (yield* (yield* rgb._bitShift_( -15))._bitAnd_( 31744))._bitOr_( yield* (yield* rgb._bitShift_( -10))._bitAnd_( 992)))._bitOr_( yield* (yield* rgb._bitShift_( -5))._bitAnd_( 31));
                 return _val == 0 ? 1 : _val;
-            }
-            if (d === 12) {
+            case 12:
                 /*for indexing a color map with 4 bits per color component*/
                 _val = yield* (yield* (yield* (yield* rgb._bitShift_( -18))._bitAnd_( 3840))._bitOr_( yield* (yield* rgb._bitShift_( -12))._bitAnd_( 240)))._bitOr_( yield* (yield* rgb._bitShift_( -6))._bitAnd_( 15));
                 return _val == 0 ? 1 : _val;
-            }
-            if (d === 9) {
+            case 9:
                 /*for indexing a color map with 3 bits per color component*/
                 _val = yield* (yield* (yield* (yield* rgb._bitShift_( -21))._bitAnd_( 448))._bitOr_( yield* (yield* rgb._bitShift_( -14))._bitAnd_( 56)))._bitOr_( yield* (yield* rgb._bitShift_( -7))._bitAnd_( 7));
                 return _val == 0 ? 1 : _val;
-            }
+            case 8:
+                return yield* this._closestPixelValue8();
+            case 4:
+                return yield* this._closestPixelValue4();
+            case 2:
+                return yield* this._closestPixelValue2();
+            case 1:
+                return yield* this._closestPixelValue1();
+            default:
+                yield* this._error_( yield* SmalltalkGlobals._ByteString.from("unknown pixel depth: ")._concat( yield* d._printString()));
         }
-        if (d === 8) {
-            return yield* this._closestPixelValue8();
-        }
-        if (d === 4) {
-            return yield* this._closestPixelValue4();
-        }
-        if (d === 2) {
-            return yield* this._closestPixelValue2();
-        }
-        if (d === 1) {
-            return yield* this._closestPixelValue1();
-        }
-        yield* this._error_( yield* SmalltalkGlobals._ByteString.from("unknown pixel depth: ")._concat( yield* d._printString()));
     }
 
 });
