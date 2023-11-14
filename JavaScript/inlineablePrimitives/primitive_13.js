@@ -14,6 +14,6 @@
 			if (arg !== 0n) {
 				const resultN = BigInt(val) / arg;
 				const coerced = Number(resultN);
-				return (coerced | 0) === coerced || Number.isSafeInteger(coerced) ? coerced : resultN;
+				return coerced == resultN && ((coerced | 0) === coerced || Number.isSafeInteger(coerced)) ? coerced : resultN;
 			}
 	}

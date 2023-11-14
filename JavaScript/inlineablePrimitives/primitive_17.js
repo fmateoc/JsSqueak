@@ -3,8 +3,8 @@
 	switch (typeof argVal) {
 		case "bigint":
 			const resultN = BigInt(val) << argVal;
-			const result = Number(resultN);
-			return (result | 0) === result || Number.isSafeInteger(result) ? result : resultN;
+			const coerced = Number(resultN);
+			return coerced == resultN && ((coerced | 0) === coerced || Number.isSafeInteger(coerced)) ? coerced : resultN;
 		case "number":
 			const is32bitInt = (argVal | 0) === argVal;
 			let shifted;
@@ -14,7 +14,7 @@
 				return shifted;
 			} else if (Number.isSafeInteger(argVal)) {
 				const resultN = BigInt(val) << BigInt(argVal);
-				const result = Number(resultN);
-				return (result | 0) === result || Number.isSafeInteger(result) ? result : resultN
+				const coerced = Number(resultN);
+				return coerced == resultN && ((coerced | 0) === coerced || Number.isSafeInteger(coerced)) ? coerced : resultN;
 			}
 	}

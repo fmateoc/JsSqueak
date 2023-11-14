@@ -7,8 +7,8 @@
 				const thisN = BigInt(val);
 				const resultN = thisN / argVal;
 				if (resultN * argVal === thisN) {
-					const result = Number(resultN);
-					return (result | 0) === result || Number.isSafeInteger(result) ? result : resultN;
+					const coerced = Number(resultN);
+					return coerced == resultN && ((coerced | 0) === coerced || Number.isSafeInteger(coerced)) ? coerced : resultN;
 				} else {
 					//Fraction
 					let m = thisN, n = argVal;

@@ -17,6 +17,6 @@
 				if (bigVal < 0 !== arg < 0 && 0n !== resultN)
 					resultN += arg;
 				const coerced = Number(resultN);
-				return (coerced | 0) === coerced || Number.isSafeInteger(coerced) ? coerced : resultN;
+				return coerced == resultN && ((coerced | 0) === coerced || Number.isSafeInteger(coerced)) ? coerced : resultN;
 			}
 	}
