@@ -22,7 +22,7 @@ const original_generate_using_ = SmalltalkGlobals._MethodNode.prototype._generat
 Object.override(SmalltalkGlobals._MethodNode.prototype, {
 
     *_generate_using_(_trailer, _aCompiledMethodClass) {
-        const prepared = yield* this._JSprepare_(false);
+        const prepared = yield* (yield* this._prepareForImageSideGeneration())._asCleanedUpParseTree();
         const emptyTrailer = yield* SmalltalkGlobals._CompiledMethodTrailer._empty();
         const cm = yield* original_generate_using_.call(prepared, emptyTrailer, SmalltalkGlobals._CompiledMethod);
         this.pointers[7] = prepared.pointers[7];    //copy the initialized encoder
