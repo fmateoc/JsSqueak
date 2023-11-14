@@ -20,7 +20,7 @@
 Object.override(FloatArrayPlugin, {
 
     primitiveFromFloat64Array(aFloat64Array) {
-        this.words =  new Uint32Array(aFloat64Array.longs.buffer);
+        this.words =  new Uint32Array(aFloat64Array.float64Array.buffer);
         return this;
     }
     ,
