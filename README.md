@@ -3,30 +3,31 @@
 This is a project that brings together several themes that have preoccupied me for a long time.
 I have been thinking about (AOT) compiling Smalltalk since I was young (I still fondly remember eagerly reading about the Vortex compiler, and amassing all the related literature I could find - this also led me to explore type systems and type inferencing, but I digress), as I was both obsessed with performance and a big Smalltalk fan.
 Now, of course, this is not quite it, but I thought the original spark was worth mentioning.
-More directly, it is inspired by Dan Ingalls' Squeak variations Potato, JSqueak and LivelyKernel, by Vanessa Freudenberg's SqueakJS - SqueakJs provided actually more than just inspiration (hence the name of the project), I have used, for example, as a starting point for plugins generation the VMMakerJS project that was used to generate the initial SqueakJS plugins, and I have also heavily borrowed from the SqueakJS file plugin and startup scripts - and by HPI's GraalSqueak/TruffleSqueak.
+
+More directly, the project is inspired by Dan Ingalls' Squeak variations Potato, JSqueak and LivelyKernel and by Vanessa Freudenberg's SqueakJS - SqueakJs provided actually more than just inspiration (hence the name of the project), I have used, for example, as a starting point for plugins generation the VMMakerJS project that was used to generate the initial SqueakJS plugins, and I have also heavily borrowed from the SqueakJS file plugin and startup scripts - and by HPI's GraalSqueak/TruffleSqueak.
 More indirectly, I have also been inspired by Alon Zakai's Emscripten.
-Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling Smalltalk to another language was possible. And JavaScript being a dynamic language as well made it possible to skip the troublesome type inferencing part of the process.
+Last, but not least, the project draws from some of my professional experiences with code transformations/transpilation: I have worked on Synchrony Systems' SMTJ IDE for Smalltalk code transformations/type inferencing/translation to Java, so I knew firsthand that compiling a large Smalltalk application/image to another language was possible. Also, JavaScript being a dynamic language as well, I could skip the troublesome type inferencing part of the process.
 
 Please see the docs folder for some implementation notes. Speaking of implementation, I should mention here Peter Deutsch' observation: “ implementing a language like Smalltalk efficiently requires the
-implementor to cheat... but that’s okay as long as you don’t get caught”. So, where am I cheating? There are no reified contexts in the implementation, but I would argue that reified contexts are not essential to the meaning of Smalltalk in general, or Squeak in particular.
-Another issue is the lack of control over the garbage collector (we rely on the native JavaScript one), and, related to that, the lack of a forwardBecome: native operation in JavaScript. Given that the semantics of forwardBecome: is linked to object pointers, over which we do not have control, the implementation is only an approximation. It works well enough that the image and the tests (other than the ones specifically focused on forward becoming local variables) are working fine.
+implementor to cheat... but that’s okay as long as you don’t get caught”. So, where am I cheating? There are no reified contexts in the implementation, although I would argue that reified contexts are not essential to the meaning of Smalltalk.
+More problematic is the lack of control over the garbage collector (we rely on the native JavaScript one) / object pointers, and, related to that, the lack of a forwardBecome: native operation in JavaScript. As a result, the implementation of forwardBecome: is only an approximation. It works well enough that the image and the tests (other than ones specifically focused on forward becoming local variables) are working fine.
 For two-way become, it is conceptually easier, as, instead of swapping the pointers to the objects, we are swapping the contents of the objects - this is not an externally (from the "image" side) observable operation.
 
 For running JsSqueak, one must first translate their Squeak image into JavaScript.
-Image versions between 4.5 and 6.0, or trunk (up to, as of this writing, 6.1alpha-22667) should work - I have tested with 4.5, 5.3, 6.0, and partially with trunk.
+Image versions between 4.5 and 6.0, or trunk should work - I have tested with 4.5, 5.3, 6.0, and partially with trunk (up to, as of this writing, 6.1alpha-22763).
 The source image intended for conversion should be reasonably clean, i.e. it should not have "dirty" editors with unsaved changes to methods, and it should not have open inspectors or debuggers.
 There are a few Squeak changesets in the Squeak folder that need to be loaded in the target image:
 1. from Squeak/image/common load first the Common-pre changeset.
 2. for closure-based images (since 4.5, but before FullBlockClosure was introduced), load the two changesets from Squeak/image/era-specific/closures; for fullClosures-based images, load the two changesets from Squeak/image/era-specific/fullClosures
-3. load the JSGeneration changeset from Squeak/image/common. This one hits an out of range error at compile time for one test method, just let it proceed
-4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: pathToJsSqueakFolder for: imageName"
+3. load the JSGeneration changeset from Squeak/image/common.
+4. in a workspace, evaluate "JavaScriptTranspiler newInstance exportJavaScriptTo: pathToJsSqueakFolder for: imageName". This one hits an out of range error at compile time for one test method, just let it proceed
    This will generate the translated classes and code in a 'JavaScript\generated\' imageName-specific subfolder within your JsSqueak folder
 5. still in a workspace, evaluate "JavaScriptTranspiler instance exportStateTo: pathToJsSqueakFolder for: imageName", then immediately minimize the image to avoid generating any new objects while the image state is being exported.
    This will generate a few files with the image state in the same imageName-specific folder. To know when it is done, check the folder until the file serialized_Smalltalk_globals.js stops growing - a clean 4.5 image should result in a 30MB file, a clean 6.0 image should result in a slightly over 100MB file.
 6. to start the image in a browser, I use a Webstorm IDE run configuration. Configure your favorite Chrome (I am using Chrome Beta to have a separate install), point it to something like https://localhost:63342/JavaScript/index.html#imageName
-   Alternatively, I have been using lately the simple http server embedded in Python, started as python -m http.server, which uses by default port 8000, but that can be changed.
+   Alternatively, I have been using lately the simple http server embedded in Python, started as python -m http.server, which uses by default port 8000.
    To start the browser (Chrome), use the command line flags --js-flags="--expose-gc --stack-size 8000 --ignore-certificate-errors" --disk-cache-dir=d:/
-	 The last option points to an inexistent drive, thus forcing Chrome to reload the JS files, otherwise Chrome annoyingly caches the files and does not refresh them when they change
+	 The last option (disk-cache-dir) points to an inexistent drive, thus forcing Chrome to reload the JS files, otherwise Chrome annoyingly caches the files and does not refresh them when they change
 
 
 Note that the generated images will include some extra, JavaScript-specific tooling: 
